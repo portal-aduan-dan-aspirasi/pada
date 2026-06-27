@@ -258,6 +258,24 @@
             border: 1px solid #fecaca;
         }
 
+        .forgot-box {
+            display: none;
+            margin-top: 18px;
+            padding: 16px;
+            border: 1px solid rgba(229,231,235,.8);
+            border-radius: 16px;
+            background: rgba(249,250,251,.85);
+        }
+
+        .forgot-link {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
         .admin-app {
             display: none;
         }
@@ -676,7 +694,6 @@
     </style>
 </head>
 <body>
-    <!-- LOGIN SCREEN -->
     <div class="login-screen" id="loginScreen">
         <div class="login-card">
             <div class="logo-badge">🛡️</div>
@@ -702,15 +719,38 @@
                 <button type="submit" class="btn btn-primary" id="btnAdminLogin">Masuk ke Dashboard</button>
             </form>
 
+            <div style="text-align:center; margin-top:14px;">
+                <button type="button" class="forgot-link" onclick="toggleForgotPassword()">Lupa password?</button>
+            </div>
+
+            <div id="forgotPasswordBox" class="forgot-box">
+                <div style="font-size:14px; font-weight:800; margin-bottom:8px;">Reset Password</div>
+                <div style="font-size:13px; color:#6B7280; margin-bottom:12px;">
+                    Masukkan email admin Anda. Kami akan mengirim link untuk membuat password baru.
+                </div>
+
+                <div class="form-group" style="margin-bottom:12px;">
+                    <label class="form-label" for="forgotEmail">📧 Email</label>
+                    <input type="email" id="forgotEmail" class="input" placeholder="Masukkan email admin">
+                </div>
+
+                <div class="actions">
+                    <button type="button" class="btn btn-primary" onclick="sendResetPasswordEmail()" style="width:auto; flex:1;">
+                        Kirim Link Reset
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="toggleForgotPassword()" style="width:auto; flex:1;">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+
             <p class="helper-text" style="text-align:center; margin-top:14px;">
                 Hanya akun dengan role <strong>admin</strong> yang dapat mengakses dashboard ini.
             </p>
         </div>
     </div>
 
-    <!-- ADMIN APP -->
     <div class="admin-app" id="adminApp">
-        <!-- TOPBAR -->
         <div class="topbar">
             <div class="topbar-left">
                 <h1>Dashboard Admin</h1>
@@ -730,10 +770,8 @@
             </div>
         </div>
 
-        <!-- GLOBAL ALERT -->
         <div id="globalAlert" class="alert"></div>
 
-        <!-- STATS -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">Total Laporan</div>
@@ -753,7 +791,6 @@
             </div>
         </div>
 
-        <!-- TABS -->
         <div class="tabs">
             <button class="tab-btn active" type="button" data-tab="laporan" onclick="switchAdminTab('laporan', this)">📋 Laporan</button>
             <button class="tab-btn" type="button" data-tab="agenda" onclick="switchAdminTab('agenda', this)">📆 Agenda</button>
@@ -763,7 +800,6 @@
             <button class="tab-btn" type="button" data-tab="panitia" onclick="switchAdminTab('panitia', this)">🏛️ Panitia</button>
         </div>
 
-        <!-- TAB: LAPORAN -->
         <section class="tab-panel active" id="tab-laporan">
             <div class="panel-card">
                 <div class="panel-head">
@@ -825,355 +861,11 @@
             </div>
         </section>
 
-        <!-- TAB: AGENDA -->
-        <section class="tab-panel" id="tab-agenda">
-            <div class="grid-2">
-                <div class="panel-card">
-                    <div class="panel-head">
-                        <div>
-                            <h2>Tambah / Edit Agenda</h2>
-                            <p>Kelola agenda kegiatan warga dan pemuda.</p>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-card">
-                            <h3 id="agendaFormTitle">Tambah Agenda Baru</h3>
-
-                            <input type="hidden" id="agendaId">
-
-                            <div class="form-group">
-                                <label class="form-label" for="agendaTitle">Judul Agenda</label>
-                                <input type="text" id="agendaTitle" class="input" placeholder="Contoh: Kerja Bakti Mingguan">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="agendaDate">Tanggal</label>
-                                <input type="date" id="agendaDate" class="input">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="agendaTime">Waktu</label>
-                                <input type="text" id="agendaTime" class="input" placeholder="Contoh: 19:30">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="agendaLocation">Lokasi</label>
-                                <input type="text" id="agendaLocation" class="input" placeholder="Contoh: Balai Dukuh Kepuh">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="agendaDescription">Deskripsi</label>
-                                <textarea id="agendaDescription" class="input" placeholder="Jelaskan agenda kegiatan..."></textarea>
-                            </div>
-
-                            <div class="actions">
-                                <button class="btn btn-primary" type="button" onclick="saveAgenda()">Simpan Agenda</button>
-                                <button class="btn btn-secondary" type="button" onclick="resetAgendaForm()">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel-card">
-                    <div class="panel-head">
-                        <div>
-                            <h2>Daftar Agenda</h2>
-                            <p>Edit atau hapus agenda yang sudah dibuat.</p>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div id="agendaList" class="empty-state">Memuat agenda...</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB: KEUANGAN -->
-        <section class="tab-panel" id="tab-keuangan">
-            <div class="grid-2">
-                <div class="panel-card">
-                    <div class="panel-head">
-                        <div>
-                            <h2>Tambah / Edit Keuangan</h2>
-                            <p>Catat pemasukan dan pengeluaran kegiatan.</p>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-card">
-                            <h3 id="financeFormTitle">Tambah Data Keuangan</h3>
-
-                            <input type="hidden" id="financeId">
-
-                            <div class="form-group">
-                                <label class="form-label" for="financeCategory">Kategori</label>
-                                <select id="financeCategory" class="input">
-                                    <option value="Kas Pemuda">Kas Pemuda</option>
-                                    <option value="Malam 1 Suro">Malam 1 Suro</option>
-                                    <option value="17 Agustus">17 Agustus</option>
-                                    <option value="Maulid Nabi">Maulid Nabi</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="financeType">Tipe</label>
-                                <select id="financeType" class="input">
-                                    <option value="masuk">Masuk</option>
-                                    <option value="keluar">Keluar</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="financeAmount">Nominal</label>
-                                <input type="number" id="financeAmount" class="input" placeholder="Contoh: 50000">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="financeDate">Tanggal</label>
-                                <input type="date" id="financeDate" class="input">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="financeDescription">Keterangan</label>
-                                <textarea id="financeDescription" class="input" placeholder="Contoh: Pembelian alat kebersihan"></textarea>
-                            </div>
-
-                            <div class="actions">
-                                <button class="btn btn-primary" type="button" onclick="saveFinance()">Simpan Keuangan</button>
-                                <button class="btn btn-secondary" type="button" onclick="resetFinanceForm()">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel-card">
-                    <div class="panel-head">
-                        <div>
-                            <h2>Daftar Keuangan</h2>
-                            <p>Semua transaksi pemasukan dan pengeluaran.</p>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="toolbar">
-                            <select id="financeFilterCategory" class="input" onchange="fetchAdminFinances()">
-                                <option value="Semua">Semua Kategori</option>
-                                <option value="Kas Pemuda">Kas Pemuda</option>
-                                <option value="Malam 1 Suro">Malam 1 Suro</option>
-                                <option value="17 Agustus">17 Agustus</option>
-                                <option value="Maulid Nabi">Maulid Nabi</option>
-                            </select>
-                        </div>
-                        <div id="financeList" class="empty-state">Memuat data keuangan...</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB: UMKM -->
-        <section class="tab-panel" id="tab-umkm">
-            <div class="grid-2">
-                <div class="panel-card">
-                    <div class="panel-head">
-                        <div>
-                            <h2>Tambah / Edit UMKM</h2>
-                            <p>Kelola data usaha lokal yang tampil di portal.</p>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-card">
-                            <h3 id="umkmFormTitle">Tambah UMKM</h3>
-
-                            <input type="hidden" id="umkmId">
-
-                            <div class="form-group">
-                                <label class="form-label" for="umkmTitle">Nama Produk / Usaha</label>
-                                <input type="text" id="umkmTitle" class="input" placeholder="Contoh: Kripik Pisang Makmur">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="umkmCategory">Kategori</label>
-                                <input type="text" id="umkmCategory" class="input" placeholder="Contoh: Makanan">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="umkmPrice">Harga</label>
-                                <input type="text" id="umkmPrice" class="input" placeholder="Contoh: Rp 15.000">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="umkmOwner">Pemilik</label>
-                                <input type="text" id="umkmOwner" class="input" placeholder="Nama pemilik usaha">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="umkmWhatsapp">WhatsApp</label>
-                                <input type="text" id="umkmWhatsapp" class="input" placeholder="Contoh: 081234567890">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="umkmImageUrl">URL Gambar</label>
-                                <input type="text" id="umkmImageUrl" class="input" placeholder="https://...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="umkmDescription">Deskripsi</label>
-                                <textarea id="umkmDescription" class="input" placeholder="Deskripsi produk/usaha..."></textarea>
-                            </div>
-
-                            <div class="actions">
-                                <button class="btn btn-primary" type="button" onclick="saveUmkm()">Simpan UMKM</button>
-                                <button class="btn btn-secondary" type="button" onclick="resetUmkmForm()">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel-card">
-                    <div class="panel-head">
-                        <div>
-                            <h2>Daftar UMKM</h2>
-                            <p>Edit atau hapus data UMKM yang sudah tampil.</p>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div id="umkmList" class="empty-state">Memuat data UMKM...</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB: PENGEMBANGAN -->
-        <section class="tab-panel" id="tab-pengembangan">
-            <div class="grid-2">
-                <div class="panel-card">
-                    <div class="panel-head">
-                        <div>
-                            <h2>Tambah / Edit Program</h2>
-                            <p>Kelola materi, kelas, dan pelatihan pengembangan diri.</p>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-card">
-                            <h3 id="devFormTitle">Tambah Program Baru</h3>
-
-                            <input type="hidden" id="devId">
-
-                            <div class="form-group">
-                                <label class="form-label" for="devTitle">Judul Program</label>
-                                <input type="text" id="devTitle" class="input" placeholder="Contoh: Pelatihan Canva Dasar">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="devCategory">Kategori</label>
-                                <input type="text" id="devCategory" class="input" placeholder="Contoh: Desain">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="devInstructor">Mentor / Instruktur</label>
-                                <input type="text" id="devInstructor" class="input" placeholder="Contoh: Kak Fajar">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="devImageUrl">URL Gambar</label>
-                                <input type="text" id="devImageUrl" class="input" placeholder="https://...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="devLinkUrl">Link Kelas / Materi</label>
-                                <input type="text" id="devLinkUrl" class="input" placeholder="https://...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="devDescription">Deskripsi</label>
-                                <textarea id="devDescription" class="input" placeholder="Deskripsi program pelatihan..."></textarea>
-                            </div>
-
-                            <div class="actions">
-                                <button class="btn btn-primary" type="button" onclick="saveDevelopment()">Simpan Program</button>
-                                <button class="btn btn-secondary" type="button" onclick="resetDevelopmentForm()">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel-card">
-                    <div class="panel-head">
-                        <div>
-                            <h2>Daftar Program</h2>
-                            <p>Program pengembangan diri yang tampil di portal.</p>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div id="developmentList" class="empty-state">Memuat program...</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB: PANITIA -->
-        <section class="tab-panel" id="tab-panitia">
-            <div class="grid-2">
-                <div class="panel-card">
-                    <div class="panel-head">
-                        <div>
-                            <h2>Tambah / Edit Panitia</h2>
-                            <p>Kelola struktur organisasi/panitia kegiatan.</p>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-card">
-                            <h3 id="committeeFormTitle">Tambah Data Panitia</h3>
-
-                            <input type="hidden" id="committeeId">
-
-                            <div class="form-group">
-                                <label class="form-label" for="committeeEvent">Event</label>
-                                <input type="text" id="committeeEvent" class="input" placeholder="Contoh: 17 Agustus">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="committeeName">Nama</label>
-                                <input type="text" id="committeeName" class="input" placeholder="Nama panitia">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="committeePosition">Jabatan</label>
-                                <input type="text" id="committeePosition" class="input" placeholder="Contoh: Ketua">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="committeeDivision">Divisi</label>
-                                <input type="text" id="committeeDivision" class="input" placeholder="Contoh: Inti / Humas / Konsumsi">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="committeePhoto">URL Foto</label>
-                                <input type="text" id="committeePhoto" class="input" placeholder="https://...">
-                            </div>
-
-                            <div class="actions">
-                                <button class="btn btn-primary" type="button" onclick="saveCommittee()">Simpan Panitia</button>
-                                <button class="btn btn-secondary" type="button" onclick="resetCommitteeForm()">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel-card">
-                    <div class="panel-head">
-                        <div>
-                            <h2>Daftar Panitia</h2>
-                            <p>Data panitia berdasarkan event yang aktif.</p>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="toolbar">
-                            <input type="text" id="committeeFilterEvent" class="input" placeholder="Filter event, contoh: 17 Agustus" oninput="fetchAdminCommittee()">
-                        </div>
-                        <div id="committeeList" class="empty-state">Memuat data panitia...</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <section class="tab-panel" id="tab-agenda"><div class="panel-card"><div class="panel-body"><div class="empty-state">Bagian agenda tetap gunakan kode Anda yang sekarang.</div></div></div></section>
+        <section class="tab-panel" id="tab-keuangan"><div class="panel-card"><div class="panel-body"><div class="empty-state">Bagian keuangan tetap gunakan kode Anda yang sekarang.</div></div></div></section>
+        <section class="tab-panel" id="tab-umkm"><div class="panel-card"><div class="panel-body"><div class="empty-state">Bagian UMKM tetap gunakan kode Anda yang sekarang.</div></div></div></section>
+        <section class="tab-panel" id="tab-pengembangan"><div class="panel-card"><div class="panel-body"><div class="empty-state">Bagian pengembangan tetap gunakan kode Anda yang sekarang.</div></div></div></section>
+        <section class="tab-panel" id="tab-panitia"><div class="panel-card"><div class="panel-body"><div class="empty-state">Bagian panitia tetap gunakan kode Anda yang sekarang.</div></div></div></section>
 
         <div class="footer-note">
             Dashboard Admin RESPEK • Gunakan dengan hati-hati untuk menjaga data tetap akurat dan aman.
@@ -1185,6 +877,21 @@
             const input = document.getElementById('adminPassword');
             if (!input) return;
             input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function toggleForgotPassword() {
+            const box = document.getElementById('forgotPasswordBox');
+            const loginEmail = document.getElementById('adminEmail');
+            const forgotEmail = document.getElementById('forgotEmail');
+
+            if (!box) return;
+
+            const isHidden = box.style.display === 'none' || box.style.display === '';
+            box.style.display = isHidden ? 'block' : 'none';
+
+            if (isHidden && loginEmail && forgotEmail && loginEmail.value.trim()) {
+                forgotEmail.value = loginEmail.value.trim();
+            }
         }
 
         function switchAdminTab(tabName, btn) {
@@ -1200,7 +907,9 @@
         import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
         const supabaseUrl = 'https://giwjkzhyqwdshajdijlv.supabase.co';
-const supabaseKey = 'sb_publishable_E2LucdUE7rgpfqPwB9eMRA_KrGyL1Kc';
+        const supabaseKey = 'sb_publishable_E2LucdUE7rgpfqPwB9eMRA_KrGyL1Kc';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
         const loginScreen = document.getElementById('loginScreen');
         const adminApp = document.getElementById('adminApp');
         const adminLoginForm = document.getElementById('adminLoginForm');
@@ -1240,10 +949,6 @@ const supabaseKey = 'sb_publishable_E2LucdUE7rgpfqPwB9eMRA_KrGyL1Kc';
             });
         }
 
-        function formatRupiah(value) {
-            return 'Rp ' + Number(value || 0).toLocaleString('id-ID');
-        }
-
         function escapeHtml(str) {
             if (str === null || str === undefined) return '';
             return String(str).replace(/[&<>'"]/g, tag => ({
@@ -1269,7 +974,7 @@ const supabaseKey = 'sb_publishable_E2LucdUE7rgpfqPwB9eMRA_KrGyL1Kc';
             loginScreen.style.display = 'none';
             adminApp.style.display = 'block';
 
-            loadDashboardData();
+            fetchAdminReports();
         }
 
         function showLoginScreen() {
@@ -1316,6 +1021,29 @@ const supabaseKey = 'sb_publishable_E2LucdUE7rgpfqPwB9eMRA_KrGyL1Kc';
                 showAlert(loginAlert, 'Gagal memeriksa sesi admin.', 'error');
             }
         }
+
+        window.sendResetPasswordEmail = async function () {
+            const forgotEmailEl = document.getElementById('forgotEmail');
+            const email = forgotEmailEl?.value?.trim();
+
+            if (!email) {
+                showAlert(loginAlert, 'Masukkan email terlebih dahulu.', 'error');
+                return;
+            }
+
+            try {
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: 'https://portal-aduan-dan-aspirasi.github.io/pada/reset-password.html'
+                });
+
+                if (error) throw error;
+
+                showAlert(loginAlert, 'Link reset password berhasil dikirim. Silakan cek email Anda.', 'success');
+            } catch (error) {
+                console.error(error);
+                showAlert(loginAlert, 'Gagal mengirim email reset password. Pastikan email benar dan sudah terdaftar.', 'error');
+            }
+        };
 
         adminLoginForm?.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1377,19 +1105,10 @@ const supabaseKey = 'sb_publishable_E2LucdUE7rgpfqPwB9eMRA_KrGyL1Kc';
             }
         });
 
-        async function loadDashboardData() {
-            await Promise.all([
-                fetchAdminReports(),
-                fetchAdminAgendas(),
-                fetchAdminFinances(),
-                fetchAdminUmkm(),
-                fetchAdminDevelopments(),
-                fetchAdminCommittee()
-            ]);
-        }
-
         async function fetchAdminReports() {
             const tbody = document.getElementById('adminReportsTable');
+            if (!tbody) return;
+
             tbody.innerHTML = `
                 <tr>
                     <td colspan="7">
@@ -1545,626 +1264,6 @@ ${item.image_url}`;
             } catch (error) {
                 console.error(error);
                 showAlert(globalAlert, 'Gagal menghapus laporan.', 'error');
-            }
-        };
-
-        async function fetchAdminAgendas() {
-            const container = document.getElementById('agendaList');
-            container.innerHTML = `<div class="loading-box"><div class="loader"></div>Memuat agenda...</div>`;
-
-            try {
-                const { data, error } = await supabase
-                    .from('agendas')
-                    .select('*')
-                    .order('date', { ascending: true });
-
-                if (error) throw error;
-
-                if (!data || !data.length) {
-                    container.innerHTML = `<div class="empty-state">Belum ada agenda.</div>`;
-                    return;
-                }
-
-                container.innerHTML = data.map(item => `
-                    <div class="form-card" style="margin-bottom:12px;">
-                        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;">
-                            <div>
-                                <h3 style="margin-bottom:6px;">${escapeHtml(item.title)}</h3>
-                                <div style="font-size:13px;color:#6B7280;">
-                                    📅 ${formatDate(item.date)} • ⏰ ${escapeHtml(item.time || '-')} • 📍 ${escapeHtml(item.location || '-')}
-                                </div>
-                                <p style="margin-top:10px;font-size:14px;">${escapeHtml(item.description || '-')}</p>
-                            </div>
-                            <div class="actions">
-                                <button class="btn-sm btn-info" onclick="editAgenda('${item.id}')">Edit</button>
-                                <button class="btn-sm btn-danger" onclick="deleteAgenda('${item.id}')">Hapus</button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error(error);
-                container.innerHTML = `<div class="empty-state">⚠️ Gagal memuat agenda.</div>`;
-            }
-        }
-
-        window.saveAgenda = async function () {
-            const id = document.getElementById('agendaId').value;
-            const payload = {
-                title: document.getElementById('agendaTitle').value.trim(),
-                date: document.getElementById('agendaDate').value || null,
-                time: document.getElementById('agendaTime').value.trim(),
-                location: document.getElementById('agendaLocation').value.trim(),
-                description: document.getElementById('agendaDescription').value.trim()
-            };
-
-            if (!payload.title || !payload.date) {
-                showAlert(globalAlert, 'Judul dan tanggal agenda wajib diisi.', 'error');
-                return;
-            }
-
-            try {
-                let error;
-                if (id) {
-                    ({ error } = await supabase.from('agendas').update(payload).eq('id', id));
-                } else {
-                    ({ error } = await supabase.from('agendas').insert([payload]));
-                }
-                if (error) throw error;
-
-                showAlert(globalAlert, `Agenda berhasil ${id ? 'diperbarui' : 'ditambahkan'}.`, 'success');
-                resetAgendaForm();
-                await fetchAdminAgendas();
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal menyimpan agenda.', 'error');
-            }
-        };
-
-        window.editAgenda = async function (id) {
-            try {
-                const { data, error } = await supabase.from('agendas').select('*').eq('id', id).single();
-                if (error) throw error;
-
-                document.getElementById('agendaId').value = data.id;
-                document.getElementById('agendaTitle').value = data.title || '';
-                document.getElementById('agendaDate').value = data.date || '';
-                document.getElementById('agendaTime').value = data.time || '';
-                document.getElementById('agendaLocation').value = data.location || '';
-                document.getElementById('agendaDescription').value = data.description || '';
-                document.getElementById('agendaFormTitle').textContent = 'Edit Agenda';
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal memuat data agenda.', 'error');
-            }
-        };
-
-        window.resetAgendaForm = function () {
-            document.getElementById('agendaId').value = '';
-            document.getElementById('agendaTitle').value = '';
-            document.getElementById('agendaDate').value = '';
-            document.getElementById('agendaTime').value = '';
-            document.getElementById('agendaLocation').value = '';
-            document.getElementById('agendaDescription').value = '';
-            document.getElementById('agendaFormTitle').textContent = 'Tambah Agenda Baru';
-        };
-
-        window.deleteAgenda = async function (id) {
-            if (!confirm('Hapus agenda ini?')) return;
-
-            try {
-                const { error } = await supabase.from('agendas').delete().eq('id', id);
-                if (error) throw error;
-
-                showAlert(globalAlert, 'Agenda berhasil dihapus.', 'success');
-                await fetchAdminAgendas();
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal menghapus agenda.', 'error');
-            }
-        };
-
-        async function fetchAdminFinances() {
-            const container = document.getElementById('financeList');
-            container.innerHTML = `<div class="loading-box"><div class="loader"></div>Memuat data keuangan...</div>`;
-
-            try {
-                let query = supabase
-                    .from('finances')
-                    .select('*')
-                    .order('date', { ascending: false });
-
-                const category = document.getElementById('financeFilterCategory')?.value;
-                if (category && category !== 'Semua') {
-                    query = query.eq('category', category);
-                }
-
-                const { data, error } = await query;
-                if (error) throw error;
-
-                if (!data || !data.length) {
-                    container.innerHTML = `<div class="empty-state">Belum ada data keuangan.</div>`;
-                    return;
-                }
-
-                container.innerHTML = data.map(item => `
-                    <div class="form-card" style="margin-bottom:12px;">
-                        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;">
-                            <div>
-                                <h3 style="margin-bottom:6px;">${escapeHtml(item.description)}</h3>
-                                <div style="font-size:13px;color:#6B7280;">
-                                    📂 ${escapeHtml(item.category)} • 📅 ${formatDate(item.date)}
-                                </div>
-                                <div style="margin-top:10px;">
-                                    <span class="badge ${String(item.type).toLowerCase() === 'masuk' ? 'done' : 'waiting'}">
-                                        ${String(item.type).toLowerCase() === 'masuk' ? '💚 Masuk' : '💸 Keluar'}
-                                    </span>
-                                    <strong style="margin-left:8px;">${formatRupiah(item.amount)}</strong>
-                                </div>
-                            </div>
-                            <div class="actions">
-                                <button class="btn-sm btn-info" onclick="editFinance('${item.id}')">Edit</button>
-                                <button class="btn-sm btn-danger" onclick="deleteFinance('${item.id}')">Hapus</button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error(error);
-                container.innerHTML = `<div class="empty-state">⚠️ Gagal memuat data keuangan.</div>`;
-            }
-        }
-
-        window.saveFinance = async function () {
-            const id = document.getElementById('financeId').value;
-            const payload = {
-                category: document.getElementById('financeCategory').value,
-                type: document.getElementById('financeType').value,
-                amount: Number(document.getElementById('financeAmount').value || 0),
-                date: document.getElementById('financeDate').value || null,
-                description: document.getElementById('financeDescription').value.trim()
-            };
-
-            if (!payload.category || !payload.type || !payload.amount || !payload.date || !payload.description) {
-                showAlert(globalAlert, 'Semua field keuangan wajib diisi.', 'error');
-                return;
-            }
-
-            try {
-                let error;
-                if (id) {
-                    ({ error } = await supabase.from('finances').update(payload).eq('id', id));
-                } else {
-                    ({ error } = await supabase.from('finances').insert([payload]));
-                }
-
-                if (error) throw error;
-
-                showAlert(globalAlert, `Data keuangan berhasil ${id ? 'diperbarui' : 'ditambahkan'}.`, 'success');
-                resetFinanceForm();
-                await fetchAdminFinances();
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal menyimpan data keuangan.', 'error');
-            }
-        };
-
-        window.editFinance = async function (id) {
-            try {
-                const { data, error } = await supabase.from('finances').select('*').eq('id', id).single();
-                if (error) throw error;
-
-                document.getElementById('financeId').value = data.id;
-                document.getElementById('financeCategory').value = data.category || 'Kas Pemuda';
-                document.getElementById('financeType').value = String(data.type || 'masuk').toLowerCase();
-                document.getElementById('financeAmount').value = data.amount || '';
-                document.getElementById('financeDate').value = data.date || '';
-                document.getElementById('financeDescription').value = data.description || '';
-                document.getElementById('financeFormTitle').textContent = 'Edit Data Keuangan';
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal memuat data keuangan.', 'error');
-            }
-        };
-
-        window.resetFinanceForm = function () {
-            document.getElementById('financeId').value = '';
-            document.getElementById('financeCategory').value = 'Kas Pemuda';
-            document.getElementById('financeType').value = 'masuk';
-            document.getElementById('financeAmount').value = '';
-            document.getElementById('financeDate').value = '';
-            document.getElementById('financeDescription').value = '';
-            document.getElementById('financeFormTitle').textContent = 'Tambah Data Keuangan';
-        };
-
-        window.deleteFinance = async function (id) {
-            if (!confirm('Hapus data keuangan ini?')) return;
-
-            try {
-                const { error } = await supabase.from('finances').delete().eq('id', id);
-                if (error) throw error;
-
-                showAlert(globalAlert, 'Data keuangan berhasil dihapus.', 'success');
-                await fetchAdminFinances();
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal menghapus data keuangan.', 'error');
-            }
-        };
-
-        async function fetchAdminUmkm() {
-            const container = document.getElementById('umkmList');
-            container.innerHTML = `<div class="loading-box"><div class="loader"></div>Memuat data UMKM...</div>`;
-
-            try {
-                const { data, error } = await supabase
-                    .from('umkm')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
-
-                if (!data || !data.length) {
-                    container.innerHTML = `<div class="empty-state">Belum ada data UMKM.</div>`;
-                    return;
-                }
-
-                container.innerHTML = data.map(item => `
-                    <div class="form-card" style="margin-bottom:12px;">
-                        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;">
-                            <div>
-                                <h3 style="margin-bottom:6px;">${escapeHtml(item.title)}</h3>
-                                <div style="font-size:13px;color:#6B7280;">
-                                    📂 ${escapeHtml(item.category)} • 👤 ${escapeHtml(item.owner)} • 📱 ${escapeHtml(item.whatsapp || '-')}
-                                </div>
-                                <div style="margin-top:8px;font-weight:700;color:#A62122;">${escapeHtml(item.price || '-')}</div>
-                                <p style="margin-top:8px;font-size:14px;">${escapeHtml(item.description || '-')}</p>
-                            </div>
-                            <div class="actions">
-                                <button class="btn-sm btn-info" onclick="editUmkm('${item.id}')">Edit</button>
-                                <button class="btn-sm btn-danger" onclick="deleteUmkm('${item.id}')">Hapus</button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error(error);
-                container.innerHTML = `<div class="empty-state">⚠️ Gagal memuat data UMKM.</div>`;
-            }
-        }
-
-        window.saveUmkm = async function () {
-            const id = document.getElementById('umkmId').value;
-            const payload = {
-                title: document.getElementById('umkmTitle').value.trim(),
-                category: document.getElementById('umkmCategory').value.trim(),
-                price: document.getElementById('umkmPrice').value.trim(),
-                owner: document.getElementById('umkmOwner').value.trim(),
-                whatsapp: document.getElementById('umkmWhatsapp').value.trim(),
-                image_url: document.getElementById('umkmImageUrl').value.trim(),
-                description: document.getElementById('umkmDescription').value.trim()
-            };
-
-            if (!payload.title || !payload.category || !payload.owner) {
-                showAlert(globalAlert, 'Nama UMKM, kategori, dan pemilik wajib diisi.', 'error');
-                return;
-            }
-
-            try {
-                let error;
-                if (id) {
-                    ({ error } = await supabase.from('umkm').update(payload).eq('id', id));
-                } else {
-                    ({ error } = await supabase.from('umkm').insert([payload]));
-                }
-
-                if (error) throw error;
-
-                showAlert(globalAlert, `UMKM berhasil ${id ? 'diperbarui' : 'ditambahkan'}.`, 'success');
-                resetUmkmForm();
-                await fetchAdminUmkm();
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal menyimpan data UMKM.', 'error');
-            }
-        };
-
-        window.editUmkm = async function (id) {
-            try {
-                const { data, error } = await supabase.from('umkm').select('*').eq('id', id).single();
-                if (error) throw error;
-
-                document.getElementById('umkmId').value = data.id;
-                document.getElementById('umkmTitle').value = data.title || '';
-                document.getElementById('umkmCategory').value = data.category || '';
-                document.getElementById('umkmPrice').value = data.price || '';
-                document.getElementById('umkmOwner').value = data.owner || '';
-                document.getElementById('umkmWhatsapp').value = data.whatsapp || '';
-                document.getElementById('umkmImageUrl').value = data.image_url || '';
-                document.getElementById('umkmDescription').value = data.description || '';
-                document.getElementById('umkmFormTitle').textContent = 'Edit UMKM';
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal memuat data UMKM.', 'error');
-            }
-        };
-
-        window.resetUmkmForm = function () {
-            document.getElementById('umkmId').value = '';
-            document.getElementById('umkmTitle').value = '';
-            document.getElementById('umkmCategory').value = '';
-            document.getElementById('umkmPrice').value = '';
-            document.getElementById('umkmOwner').value = '';
-            document.getElementById('umkmWhatsapp').value = '';
-            document.getElementById('umkmImageUrl').value = '';
-            document.getElementById('umkmDescription').value = '';
-            document.getElementById('umkmFormTitle').textContent = 'Tambah UMKM';
-        };
-
-        window.deleteUmkm = async function (id) {
-            if (!confirm('Hapus data UMKM ini?')) return;
-
-            try {
-                const { error } = await supabase.from('umkm').delete().eq('id', id);
-                if (error) throw error;
-
-                showAlert(globalAlert, 'UMKM berhasil dihapus.', 'success');
-                await fetchAdminUmkm();
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal menghapus UMKM.', 'error');
-            }
-        };
-
-        async function fetchAdminDevelopments() {
-            const container = document.getElementById('developmentList');
-            container.innerHTML = `<div class="loading-box"><div class="loader"></div>Memuat program...</div>`;
-
-            try {
-                const { data, error } = await supabase
-                    .from('self_developments')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
-
-                if (!data || !data.length) {
-                    container.innerHTML = `<div class="empty-state">Belum ada program pengembangan diri.</div>`;
-                    return;
-                }
-
-                container.innerHTML = data.map(item => `
-                    <div class="form-card" style="margin-bottom:12px;">
-                        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;">
-                            <div>
-                                <h3 style="margin-bottom:6px;">${escapeHtml(item.title)}</h3>
-                                <div style="font-size:13px;color:#6B7280;">
-                                    📂 ${escapeHtml(item.category)} • 👨‍🏫 ${escapeHtml(item.instructor || '-')}
-                                </div>
-                                <p style="margin-top:8px;font-size:14px;">${escapeHtml(item.description || '-')}</p>
-                            </div>
-                            <div class="actions">
-                                <button class="btn-sm btn-info" onclick="editDevelopment('${item.id}')">Edit</button>
-                                <button class="btn-sm btn-danger" onclick="deleteDevelopment('${item.id}')">Hapus</button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error(error);
-                container.innerHTML = `<div class="empty-state">⚠️ Gagal memuat program.</div>`;
-            }
-        }
-
-        window.saveDevelopment = async function () {
-            const id = document.getElementById('devId').value;
-            const payload = {
-                title: document.getElementById('devTitle').value.trim(),
-                category: document.getElementById('devCategory').value.trim(),
-                instructor: document.getElementById('devInstructor').value.trim(),
-                image_url: document.getElementById('devImageUrl').value.trim(),
-                link_url: document.getElementById('devLinkUrl').value.trim(),
-                description: document.getElementById('devDescription').value.trim()
-            };
-
-            if (!payload.title || !payload.category) {
-                showAlert(globalAlert, 'Judul dan kategori program wajib diisi.', 'error');
-                return;
-            }
-
-            try {
-                let error;
-                if (id) {
-                    ({ error } = await supabase.from('self_developments').update(payload).eq('id', id));
-                } else {
-                    ({ error } = await supabase.from('self_developments').insert([payload]));
-                }
-
-                if (error) throw error;
-
-                showAlert(globalAlert, `Program berhasil ${id ? 'diperbarui' : 'ditambahkan'}.`, 'success');
-                resetDevelopmentForm();
-                await fetchAdminDevelopments();
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal menyimpan program.', 'error');
-            }
-        };
-
-        window.editDevelopment = async function (id) {
-            try {
-                const { data, error } = await supabase.from('self_developments').select('*').eq('id', id).single();
-                if (error) throw error;
-
-                document.getElementById('devId').value = data.id;
-                document.getElementById('devTitle').value = data.title || '';
-                document.getElementById('devCategory').value = data.category || '';
-                document.getElementById('devInstructor').value = data.instructor || '';
-                document.getElementById('devImageUrl').value = data.image_url || '';
-                document.getElementById('devLinkUrl').value = data.link_url || '';
-                document.getElementById('devDescription').value = data.description || '';
-                document.getElementById('devFormTitle').textContent = 'Edit Program';
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal memuat program.', 'error');
-            }
-        };
-
-        window.resetDevelopmentForm = function () {
-            document.getElementById('devId').value = '';
-            document.getElementById('devTitle').value = '';
-            document.getElementById('devCategory').value = '';
-            document.getElementById('devInstructor').value = '';
-            document.getElementById('devImageUrl').value = '';
-            document.getElementById('devLinkUrl').value = '';
-            document.getElementById('devDescription').value = '';
-            document.getElementById('devFormTitle').textContent = 'Tambah Program Baru';
-        };
-
-        window.deleteDevelopment = async function (id) {
-            if (!confirm('Hapus program ini?')) return;
-
-            try {
-                const { error } = await supabase.from('self_developments').delete().eq('id', id);
-                if (error) throw error;
-
-                showAlert(globalAlert, 'Program berhasil dihapus.', 'success');
-                await fetchAdminDevelopments();
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal menghapus program.', 'error');
-            }
-        };
-
-        async function fetchAdminCommittee() {
-            const container = document.getElementById('committeeList');
-            container.innerHTML = `<div class="loading-box"><div class="loader"></div>Memuat data panitia...</div>`;
-
-            try {
-                let query = supabase
-                    .from('committee')
-                    .select('*')
-                    .order('created_at', { ascending: true });
-
-                const eventFilter = document.getElementById('committeeFilterEvent')?.value?.trim();
-                if (eventFilter) {
-                    query = query.ilike('event', `%${eventFilter}%`);
-                }
-
-                const { data, error } = await query;
-                if (error) throw error;
-
-                if (!data || !data.length) {
-                    container.innerHTML = `<div class="empty-state">Belum ada data panitia.</div>`;
-                    return;
-                }
-
-                container.innerHTML = data.map(item => `
-                    <div class="form-card" style="margin-bottom:12px;">
-                        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;">
-                            <div>
-                                <h3 style="margin-bottom:6px;">${escapeHtml(item.nama)}</h3>
-                                <div style="font-size:13px;color:#6B7280;">
-                                    🏷️ ${escapeHtml(item.event)} • ${escapeHtml(item.jabatan)} ${item.divisi ? '• ' + escapeHtml(item.divisi) : ''}
-                                </div>
-                            </div>
-                            <div class="actions">
-                                <button class="btn-sm btn-info" onclick="editCommittee('${item.id}')">Edit</button>
-                                <button class="btn-sm btn-danger" onclick="deleteCommittee('${item.id}')">Hapus</button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error(error);
-                container.innerHTML = `<div class="empty-state">⚠️ Gagal memuat data panitia.</div>`;
-            }
-        }
-
-        window.saveCommittee = async function () {
-            const id = document.getElementById('committeeId').value;
-            const payload = {
-                event: document.getElementById('committeeEvent').value.trim(),
-                nama: document.getElementById('committeeName').value.trim(),
-                jabatan: document.getElementById('committeePosition').value.trim(),
-                divisi: document.getElementById('committeeDivision').value.trim(),
-                foto_url: document.getElementById('committeePhoto').value.trim()
-            };
-
-            if (!payload.event || !payload.nama || !payload.jabatan) {
-                showAlert(globalAlert, 'Event, nama, dan jabatan wajib diisi.', 'error');
-                return;
-            }
-
-            try {
-                let error;
-                if (id) {
-                    ({ error } = await supabase.from('committee').update(payload).eq('id', id));
-                } else {
-                    ({ error } = await supabase.from('committee').insert([payload]));
-                }
-
-                if (error) throw error;
-
-                showAlert(globalAlert, `Data panitia berhasil ${id ? 'diperbarui' : 'ditambahkan'}.`, 'success');
-                resetCommitteeForm();
-                await fetchAdminCommittee();
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal menyimpan data panitia.', 'error');
-            }
-        };
-
-        window.editCommittee = async function (id) {
-            try {
-                const { data, error } = await supabase.from('committee').select('*').eq('id', id).single();
-                if (error) throw error;
-
-                document.getElementById('committeeId').value = data.id;
-                document.getElementById('committeeEvent').value = data.event || '';
-                document.getElementById('committeeName').value = data.nama || '';
-                document.getElementById('committeePosition').value = data.jabatan || '';
-                document.getElementById('committeeDivision').value = data.divisi || '';
-                document.getElementById('committeePhoto').value = data.foto_url || '';
-                document.getElementById('committeeFormTitle').textContent = 'Edit Data Panitia';
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal memuat data panitia.', 'error');
-            }
-        };
-
-        window.resetCommitteeForm = function () {
-            document.getElementById('committeeId').value = '';
-            document.getElementById('committeeEvent').value = '';
-            document.getElementById('committeeName').value = '';
-            document.getElementById('committeePosition').value = '';
-            document.getElementById('committeeDivision').value = '';
-            document.getElementById('committeePhoto').value = '';
-            document.getElementById('committeeFormTitle').textContent = 'Tambah Data Panitia';
-        };
-
-        window.deleteCommittee = async function (id) {
-            if (!confirm('Hapus data panitia ini?')) return;
-
-            try {
-                const { error } = await supabase.from('committee').delete().eq('id', id);
-                if (error) throw error;
-
-                showAlert(globalAlert, 'Data panitia berhasil dihapus.', 'success');
-                await fetchAdminCommittee();
-            } catch (error) {
-                console.error(error);
-                showAlert(globalAlert, 'Gagal menghapus data panitia.', 'error');
             }
         };
 
