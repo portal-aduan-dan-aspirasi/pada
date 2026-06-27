@@ -753,7 +753,6 @@
 
     <!-- ADMIN APP -->
     <div class="admin-app" id="adminApp">
-        <!-- TOPBAR -->
         <div class="topbar">
             <div class="topbar-left">
                 <h1>Dashboard Admin</h1>
@@ -773,10 +772,8 @@
             </div>
         </div>
 
-        <!-- GLOBAL ALERT -->
         <div id="globalAlert" class="alert"></div>
 
-        <!-- STATS -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">Total Laporan</div>
@@ -796,7 +793,6 @@
             </div>
         </div>
 
-        <!-- TABS -->
         <div class="tabs">
             <button class="tab-btn active" type="button" data-tab="laporan" onclick="switchAdminTab('laporan', this)">📋 Laporan</button>
             <button class="tab-btn" type="button" data-tab="agenda" onclick="switchAdminTab('agenda', this)">📆 Agenda</button>
@@ -804,6 +800,7 @@
             <button class="tab-btn" type="button" data-tab="umkm" onclick="switchAdminTab('umkm', this)">🛍️ UMKM</button>
             <button class="tab-btn" type="button" data-tab="pengembangan" onclick="switchAdminTab('pengembangan', this)">🚀 Pengembangan</button>
             <button class="tab-btn" type="button" data-tab="panitia" onclick="switchAdminTab('panitia', this)">🏛️ Panitia</button>
+            <button class="tab-btn" type="button" data-tab="akun" onclick="switchAdminTab('akun', this)">👥 Akun</button>
         </div>
 
         <!-- TAB: LAPORAN -->
@@ -881,7 +878,6 @@
                     <div class="panel-body">
                         <div class="form-card">
                             <h3 id="agendaFormTitle">Tambah Agenda Baru</h3>
-
                             <input type="hidden" id="agendaId">
 
                             <div class="form-group">
@@ -944,7 +940,6 @@
                     <div class="panel-body">
                         <div class="form-card">
                             <h3 id="financeFormTitle">Tambah Data Keuangan</h3>
-
                             <input type="hidden" id="financeId">
 
                             <div class="form-group">
@@ -1024,7 +1019,6 @@
                     <div class="panel-body">
                         <div class="form-card">
                             <h3 id="umkmFormTitle">Tambah UMKM</h3>
-
                             <input type="hidden" id="umkmId">
 
                             <div class="form-group">
@@ -1097,7 +1091,6 @@
                     <div class="panel-body">
                         <div class="form-card">
                             <h3 id="devFormTitle">Tambah Program Baru</h3>
-
                             <input type="hidden" id="devId">
 
                             <div class="form-group">
@@ -1165,7 +1158,6 @@
                     <div class="panel-body">
                         <div class="form-card">
                             <h3 id="committeeFormTitle">Tambah Data Panitia</h3>
-
                             <input type="hidden" id="committeeId">
 
                             <div class="form-group">
@@ -1218,6 +1210,83 @@
             </div>
         </section>
 
+        <!-- TAB: AKUN -->
+        <section class="tab-panel" id="tab-akun">
+            <div class="grid-2">
+                <div class="panel-card">
+                    <div class="panel-head">
+                        <div>
+                            <h2>Siapkan Akun Baru</h2>
+                            <p>Form ini hanya menyiapkan data akun baru. Pembuatan user dilakukan manual di Supabase agar sesi admin tetap aman.</p>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-card">
+                            <h3>Data Akun Baru</h3>
+
+                            <div class="form-group">
+                                <label class="form-label" for="newUserName">Nama Lengkap</label>
+                                <input type="text" id="newUserName" class="input" placeholder="Contoh: Budi Santoso">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="newUserEmail">Email</label>
+                                <input type="email" id="newUserEmail" class="input" placeholder="contoh@email.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="newUserPassword">Password Awal</label>
+                                <div class="input-wrap">
+                                    <input type="password" id="newUserPassword" class="input" placeholder="Minimal 6 karakter">
+                                    <button type="button" class="toggle-pass" onclick="togglePasswordField('newUserPassword')">👁️</button>
+                                </div>
+                            </div>
+
+                            <div class="actions">
+                                <button class="btn btn-primary" type="button" onclick="copyPreparedAccountData()">Salin Data Akun</button>
+                                <button class="btn btn-secondary" type="button" onclick="resetCreateUserForm()">Reset</button>
+                            </div>
+
+                            <div class="helper-text">
+                                Setelah data disalin, buat user secara manual di Supabase Authentication agar sesi admin tidak berubah.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-head">
+                        <div>
+                            <h2>Langkah Aman</h2>
+                            <p>Ikuti alur ini agar akun baru berhasil dibuat tanpa mengganggu login admin.</p>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-card">
+                            <h3>Workflow</h3>
+                            <ol style="padding-left:18px; color:#374151; font-size:14px; line-height:1.9;">
+                                <li>Isi nama, email, dan password awal di form.</li>
+                                <li>Klik <strong>Salin Data Akun</strong>.</li>
+                                <li>Buka <strong>Supabase → Authentication → Users</strong>.</li>
+                                <li>Buat user baru secara manual menggunakan email dan password tersebut.</li>
+                                <li>Tambahkan / update data di tabel <strong>profiles</strong>.</li>
+                                <li>Jika perlu akun admin, ubah <strong>role</strong> menjadi <strong>admin</strong> secara manual.</li>
+                            </ol>
+                        </div>
+
+                        <div class="form-card" style="margin-top:16px;">
+                            <h3>Catatan</h3>
+                            <ul style="padding-left:18px; color:#374151; font-size:14px; line-height:1.8;">
+                                <li>Metode ini lebih aman daripada membuat akun langsung dari frontend.</li>
+                                <li>Tidak mengganggu sesi admin yang sedang login.</li>
+                                <li>Tidak memberikan role admin secara otomatis.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <div class="footer-note">
             Dashboard Admin RESPEK • Gunakan dengan hati-hati untuk menjaga data tetap akurat dan aman.
         </div>
@@ -1243,6 +1312,12 @@
             if (isHidden && loginEmail && forgotEmail && loginEmail.value.trim()) {
                 forgotEmail.value = loginEmail.value.trim();
             }
+        }
+
+        function togglePasswordField(id) {
+            const input = document.getElementById(id);
+            if (!input) return;
+            input.type = input.type === 'password' ? 'text' : 'password';
         }
 
         function switchAdminTab(tabName, btn) {
@@ -1396,7 +1471,50 @@
                 showAlert(loginAlert, 'Link reset password berhasil dikirim. Silakan cek email Anda.', 'success');
             } catch (error) {
                 console.error(error);
-                showAlert(loginAlert, 'Gagal mengirim email reset password. Pastikan email benar dan sudah terdaftar.', 'error');
+                showAlert(loginAlert, error.message || 'Gagal mengirim email reset password.', 'error');
+            }
+        };
+
+        window.resetCreateUserForm = function () {
+            document.getElementById('newUserName').value = '';
+            document.getElementById('newUserEmail').value = '';
+            document.getElementById('newUserPassword').value = '';
+        };
+
+        window.copyPreparedAccountData = async function () {
+            const fullName = document.getElementById('newUserName').value.trim();
+            const email = document.getElementById('newUserEmail').value.trim();
+            const password = document.getElementById('newUserPassword').value;
+
+            if (!fullName || !email || !password) {
+                showAlert(globalAlert, 'Nama, email, dan password wajib diisi.', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showAlert(globalAlert, 'Password minimal 6 karakter.', 'error');
+                return;
+            }
+
+            const text = [
+                'DATA AKUN BARU',
+                `Nama: ${fullName}`,
+                `Email: ${email}`,
+                `Password Awal: ${password}`,
+                '',
+                'Langkah berikutnya:',
+                '1. Buat user di Supabase Authentication > Users',
+                '2. Tambahkan/update profile',
+                '3. Ubah role ke admin jika diperlukan'
+            ].join('
+');
+
+            try {
+                await navigator.clipboard.writeText(text);
+                showAlert(globalAlert, 'Data akun berhasil disalin. Lanjutkan pembuatan user di Supabase.', 'success');
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal menyalin data akun. Silakan salin manual.', 'error');
             }
         };
 
