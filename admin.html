@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Portal RESPEK</title>
+    <meta name="theme-color" content="#A62122">
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Admin RESPEK">
+    <link rel="apple-touch-icon" href="logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #A62122;
+            --primary-hover: #8B1A1B;
+            --bg: #F3F4F6;
+            --card: rgba(255,255,255,0.88);
+            --border: rgba(229,231,235,.85);
+            --text: #111827;
+            --muted: #6B7280;
+            --success: #065F46;
+            --success-bg: #D1FAE5;
+            --warning: #92400E;
+            --warning-bg: #FEF3C7;
+            --danger: #991B1B;
+            --danger-bg: #FEE2E2;
+            --info: #1D4ED8;
+            --info-bg: #DBEAFE;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+            --shadow-md: 0 10px 30px -10px rgba(0,0,0,.10);
+            --shadow-lg: 0 20px 50px -12px rgba(0,0,0,.16);
+            --radius-md: 16px;
+            --radius-lg: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            right: -10%;
+            width: 420px;
+            height: 420px;
+            background: radial-gradient(circle, rgba(166,33,34,.05) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -12%;
+            left: -8%;
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(166,33,34,.05) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .login-screen {
+            min-height: calc(100vh - 40px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255,255,255,.92);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,.7);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 32px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto auto 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), #d22b2d, var(--primary));
+        }
+
+        .logo-badge {
+            width: 72px;
+            height: 72px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: 800;
+            margin: 0 auto 18px;
+            box-shadow: 0 12px 24px rgba(166,33,34,.25);
+        }
+
+        .login-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -.3px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px 16px;
+            font-size: 15px;
+            font-family: inherit;
+            background: rgba(249,250,251,.85);
+            color: var(--text);
+            transition: .25s ease;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(166,33,34,.14);
+        }
+
+        .toggle-pass {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .btn {
+            width: 100%;
+            border: none;
+            border-radius: 999px;
+            padding: 14px 18px;
+            font-size: 15px;
+            font-weight: 800;
+            font-family: inherit;
+            cursor: pointer;
+            transition: .25s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: #fff;
+            box-shadow: 0 10px 24px rgba(166,33,34,.28);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 30px rgba(166,33,34,.35);
+        }
+
+        .btn-primary:disabled {
+            background: #d1d5db;
+            color: #9ca3af;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,.85);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: #fff;
+        }
+
+        .alert {
+            display: none;
+            padding: 14px 16px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert-error {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 1px solid #fecaca;
+        }
+
+        .admin-app {
+            display: none;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            background: rgba(255,255,255,.82);
+            backdrop-filter: blur(14px);
+            padding: 16px 18px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,.7);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .topbar-left h1 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -.4px;
+        }
+
+        .topbar-left p {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .admin-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(166,33,34,.08);
+            color: var(--primary);
+            border: 1px solid rgba(166,33,34,.18);
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            border: none;
+            background: rgba(254,226,226,.9);
+            color: var(--danger);
+            border: 1px solid #fecaca;
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .25s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-1px);
+            background: #fff1f2;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,.82);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,255,255,.7);
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -.4px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            margin-bottom: 22px;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            border: 1px solid rgba(229,231,235,.8);
+            background: rgba(255,255,255,.78);
+            color: var(--muted);
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: .25s ease;
+            font-family: inherit;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(166,33,34,.25);
+        }
+
+        .tab-panel {
+            display: none;
+            animation: fadeIn .25s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .panel-card {
+            background: rgba(255,255,255,.84);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,.72);
+            border-radius: 24px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .panel-head {
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(229,231,235,.7);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .panel-head h2 {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -.3px;
+        }
+
+        .panel-head p {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .panel-body {
+            padding: 20px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .toolbar .input,
+        .toolbar select {
+            max-width: 240px;
+        }
+
+        .data-table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 840px;
+            background: rgba(255,255,255,.86);
+        }
+
+        th, td {
+            padding: 14px 14px;
+            border-bottom: 1px solid rgba(229,231,235,.7);
+            vertical-align: top;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background: rgba(249,250,251,.96);
+            color: var(--muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+            font-weight: 800;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .badge.waiting {
+            background: var(--warning-bg);
+            color: var(--warning);
+        }
+
+        .badge.progress {
+            background: var(--info-bg);
+            color: var(--info);
+        }
+
+        .badge.done {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+
+        .badge.admin {
+            background: rgba(166,33,34,.1);
+            color: var(--primary);
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-sm {
+            border: none;
+            border-radius: 12px;
+            padding: 9px 12px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: inherit;
+            transition: .2s ease;
+        }
+
+        .btn-sm:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-info {
+            background: rgba(219,234,254,.95);
+            color: var(--info);
+            border: 1px solid #bfdbfe;
+        }
+
+        .btn-success {
+            background: rgba(209,250,229,.95);
+            color: var(--success);
+            border: 1px solid #a7f3d0;
+        }
+
+        .btn-danger {
+            background: rgba(254,226,226,.95);
+            color: var(--danger);
+            border: 1px solid #fecaca;
+        }
+
+        .btn-muted {
+            background: rgba(243,244,246,.95);
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .form-card {
+            background: rgba(255,255,255,.76);
+            border: 1px solid rgba(229,231,235,.7);
+            border-radius: 20px;
+            padding: 18px;
+        }
+
+        .form-card h3 {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        textarea.input {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 32px 16px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .loading-box {
+            text-align: center;
+            padding: 30px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .loader {
+            width: 34px;
+            height: 34px;
+            border: 4px solid rgba(229,231,235,.9);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .helper-text {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 26px;
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        @media (max-width: 1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 14px;
+            }
+
+            .stats-grid,
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 14px;
+            }
+
+            .topbar-left h1 {
+                font-size: 20px;
+            }
+
+            .panel-head,
+            .panel-body {
+                padding: 16px;
+            }
+
+            .toolbar .input,
+            .toolbar select,
+            .toolbar .btn {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .login-card {
+                padding: 28px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <div class="logo-badge">🛡️</div>
+            <h1 class="login-title">Admin Portal RESPEK</h1>
+            <p class="login-subtitle">Masuk menggunakan akun admin untuk mengelola portal.</p>
+
+            <div id="loginAlert" class="alert"></div>
+
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label class="form-label" for="adminEmail">📧 Email Admin</label>
+                    <input type="email" id="adminEmail" class="input" placeholder="admin@email.com" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="adminPassword">🔒 Kata Sandi</label>
+                    <div class="input-wrap">
+                        <input type="password" id="adminPassword" class="input" placeholder="Masukkan kata sandi admin" required autocomplete="current-password">
+                        <button type="button" class="toggle-pass" onclick="toggleAdminPassword()">👁️</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="btnAdminLogin">Masuk ke Dashboard</button>
+            </form>
+
+            <p class="helper-text" style="text-align:center; margin-top:14px;">
+                Hanya akun dengan role <strong>admin</strong> yang dapat mengakses dashboard ini.
+            </p>
+        </div>
+    </div>
+
+    <!-- ADMIN APP -->
+    <div class="admin-app" id="adminApp">
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>Dashboard Admin</h1>
+                <p>Kelola laporan warga, agenda, keuangan, UMKM, pengembangan diri, dan panitia.</p>
+            </div>
+
+            <div class="topbar-right">
+                <div class="admin-chip">
+                    <span>👤</span>
+                    <span id="adminName">Admin</span>
+                </div>
+                <div class="admin-chip">
+                    <span>🛡️</span>
+                    <span id="adminRole">ADMIN</span>
+                </div>
+                <button class="logout-btn" type="button" onclick="logoutAdmin()">Keluar</button>
+            </div>
+        </div>
+
+        <!-- GLOBAL ALERT -->
+        <div id="globalAlert" class="alert"></div>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Laporan</div>
+                <div class="stat-value" id="statReports">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Menunggu</div>
+                <div class="stat-value" id="statWaiting">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Diproses</div>
+                <div class="stat-value" id="statProgress">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Selesai</div>
+                <div class="stat-value" id="statDone">0</div>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" type="button" data-tab="laporan" onclick="switchAdminTab('laporan', this)">📋 Laporan</button>
+            <button class="tab-btn" type="button" data-tab="agenda" onclick="switchAdminTab('agenda', this)">📆 Agenda</button>
+            <button class="tab-btn" type="button" data-tab="keuangan" onclick="switchAdminTab('keuangan', this)">💰 Keuangan</button>
+            <button class="tab-btn" type="button" data-tab="umkm" onclick="switchAdminTab('umkm', this)">🛍️ UMKM</button>
+            <button class="tab-btn" type="button" data-tab="pengembangan" onclick="switchAdminTab('pengembangan', this)">🚀 Pengembangan</button>
+            <button class="tab-btn" type="button" data-tab="panitia" onclick="switchAdminTab('panitia', this)">🏛️ Panitia</button>
+        </div>
+
+        <!-- TAB: LAPORAN -->
+        <section class="tab-panel active" id="tab-laporan">
+            <div class="panel-card">
+                <div class="panel-head">
+                    <div>
+                        <h2>Kelola Laporan Warga</h2>
+                        <p>Lihat laporan masuk, perbarui status, atau hapus laporan bermasalah.</p>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="toolbar">
+                        <input type="text" id="reportSearch" class="input" placeholder="Cari judul / kategori / nama..." oninput="filterReportsAdmin()">
+                        <select id="reportStatusFilter" class="input" onchange="filterReportsAdmin()">
+                            <option value="Semua">Semua Status</option>
+                            <option value="Menunggu">Menunggu</option>
+                            <option value="Diproses">Diproses</option>
+                            <option value="Selesai">Selesai</option>
+                        </select>
+                        <select id="reportCategoryFilter" class="input" onchange="filterReportsAdmin()">
+                            <option value="Semua">Semua Kategori</option>
+                            <option value="Infrastruktur">Infrastruktur</option>
+                            <option value="Lingkungan">Lingkungan</option>
+                            <option value="Keamanan">Keamanan</option>
+                            <option value="Program">Program</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <button class="btn btn-secondary" type="button" onclick="fetchAdminReports()">Refresh</button>
+                    </div>
+
+                    <div class="data-table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Judul</th>
+                                    <th>Kategori</th>
+                                    <th>Pelapor</th>
+                                    <th>Status</th>
+                                    <th>Upvote</th>
+                                    <th>Tanggal</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminReportsTable">
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="loading-box">
+                                            <div class="loader"></div>
+                                            Memuat laporan...
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="helper-text">
+                        Klik tombol detail/status untuk melihat deskripsi lengkap dan memperbarui status laporan.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: AGENDA -->
+        <section class="tab-panel" id="tab-agenda">
+            <div class="grid-2">
+                <div class="panel-card">
+                    <div class="panel-head">
+                        <div>
+                            <h2>Tambah / Edit Agenda</h2>
+                            <p>Kelola agenda kegiatan warga dan pemuda.</p>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-card">
+                            <h3 id="agendaFormTitle">Tambah Agenda Baru</h3>
+
+                            <input type="hidden" id="agendaId">
+
+                            <div class="form-group">
+                                <label class="form-label" for="agendaTitle">Judul Agenda</label>
+                                <input type="text" id="agendaTitle" class="input" placeholder="Contoh: Kerja Bakti Mingguan">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="agendaDate">Tanggal</label>
+                                <input type="date" id="agendaDate" class="input">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="agendaTime">Waktu</label>
+                                <input type="text" id="agendaTime" class="input" placeholder="Contoh: 19:30">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="agendaLocation">Lokasi</label>
+                                <input type="text" id="agendaLocation" class="input" placeholder="Contoh: Balai Dukuh Kepuh">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="agendaDescription">Deskripsi</label>
+                                <textarea id="agendaDescription" class="input" placeholder="Jelaskan agenda kegiatan..."></textarea>
+                            </div>
+
+                            <div class="actions">
+                                <button class="btn btn-primary" type="button" onclick="saveAgenda()">Simpan Agenda</button>
+                                <button class="btn btn-secondary" type="button" onclick="resetAgendaForm()">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-head">
+                        <div>
+                            <h2>Daftar Agenda</h2>
+                            <p>Edit atau hapus agenda yang sudah dibuat.</p>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="agendaList" class="empty-state">Memuat agenda...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: KEUANGAN -->
+        <section class="tab-panel" id="tab-keuangan">
+            <div class="grid-2">
+                <div class="panel-card">
+                    <div class="panel-head">
+                        <div>
+                            <h2>Tambah / Edit Keuangan</h2>
+                            <p>Catat pemasukan dan pengeluaran kegiatan.</p>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-card">
+                            <h3 id="financeFormTitle">Tambah Data Keuangan</h3>
+
+                            <input type="hidden" id="financeId">
+
+                            <div class="form-group">
+                                <label class="form-label" for="financeCategory">Kategori</label>
+                                <select id="financeCategory" class="input">
+                                    <option value="Kas Pemuda">Kas Pemuda</option>
+                                    <option value="Malam 1 Suro">Malam 1 Suro</option>
+                                    <option value="17 Agustus">17 Agustus</option>
+                                    <option value="Maulid Nabi">Maulid Nabi</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="financeType">Tipe</label>
+                                <select id="financeType" class="input">
+                                    <option value="masuk">Masuk</option>
+                                    <option value="keluar">Keluar</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="financeAmount">Nominal</label>
+                                <input type="number" id="financeAmount" class="input" placeholder="Contoh: 50000">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="financeDate">Tanggal</label>
+                                <input type="date" id="financeDate" class="input">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="financeDescription">Keterangan</label>
+                                <textarea id="financeDescription" class="input" placeholder="Contoh: Pembelian alat kebersihan"></textarea>
+                            </div>
+
+                            <div class="actions">
+                                <button class="btn btn-primary" type="button" onclick="saveFinance()">Simpan Keuangan</button>
+                                <button class="btn btn-secondary" type="button" onclick="resetFinanceForm()">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-head">
+                        <div>
+                            <h2>Daftar Keuangan</h2>
+                            <p>Semua transaksi pemasukan dan pengeluaran.</p>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="toolbar">
+                            <select id="financeFilterCategory" class="input" onchange="fetchAdminFinances()">
+                                <option value="Semua">Semua Kategori</option>
+                                <option value="Kas Pemuda">Kas Pemuda</option>
+                                <option value="Malam 1 Suro">Malam 1 Suro</option>
+                                <option value="17 Agustus">17 Agustus</option>
+                                <option value="Maulid Nabi">Maulid Nabi</option>
+                            </select>
+                        </div>
+                        <div id="financeList" class="empty-state">Memuat data keuangan...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: UMKM -->
+        <section class="tab-panel" id="tab-umkm">
+            <div class="grid-2">
+                <div class="panel-card">
+                    <div class="panel-head">
+                        <div>
+                            <h2>Tambah / Edit UMKM</h2>
+                            <p>Kelola data usaha lokal yang tampil di portal.</p>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-card">
+                            <h3 id="umkmFormTitle">Tambah UMKM</h3>
+
+                            <input type="hidden" id="umkmId">
+
+                            <div class="form-group">
+                                <label class="form-label" for="umkmTitle">Nama Produk / Usaha</label>
+                                <input type="text" id="umkmTitle" class="input" placeholder="Contoh: Kripik Pisang Makmur">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="umkmCategory">Kategori</label>
+                                <input type="text" id="umkmCategory" class="input" placeholder="Contoh: Makanan">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="umkmPrice">Harga</label>
+                                <input type="text" id="umkmPrice" class="input" placeholder="Contoh: Rp 15.000">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="umkmOwner">Pemilik</label>
+                                <input type="text" id="umkmOwner" class="input" placeholder="Nama pemilik usaha">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="umkmWhatsapp">WhatsApp</label>
+                                <input type="text" id="umkmWhatsapp" class="input" placeholder="Contoh: 081234567890">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="umkmImageUrl">URL Gambar</label>
+                                <input type="text" id="umkmImageUrl" class="input" placeholder="https://...">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="umkmDescription">Deskripsi</label>
+                                <textarea id="umkmDescription" class="input" placeholder="Deskripsi produk/usaha..."></textarea>
+                            </div>
+
+                            <div class="actions">
+                                <button class="btn btn-primary" type="button" onclick="saveUmkm()">Simpan UMKM</button>
+                                <button class="btn btn-secondary" type="button" onclick="resetUmkmForm()">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-head">
+                        <div>
+                            <h2>Daftar UMKM</h2>
+                            <p>Edit atau hapus data UMKM yang sudah tampil.</p>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="umkmList" class="empty-state">Memuat data UMKM...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: PENGEMBANGAN -->
+        <section class="tab-panel" id="tab-pengembangan">
+            <div class="grid-2">
+                <div class="panel-card">
+                    <div class="panel-head">
+                        <div>
+                            <h2>Tambah / Edit Program</h2>
+                            <p>Kelola materi, kelas, dan pelatihan pengembangan diri.</p>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-card">
+                            <h3 id="devFormTitle">Tambah Program Baru</h3>
+
+                            <input type="hidden" id="devId">
+
+                            <div class="form-group">
+                                <label class="form-label" for="devTitle">Judul Program</label>
+                                <input type="text" id="devTitle" class="input" placeholder="Contoh: Pelatihan Canva Dasar">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="devCategory">Kategori</label>
+                                <input type="text" id="devCategory" class="input" placeholder="Contoh: Desain">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="devInstructor">Mentor / Instruktur</label>
+                                <input type="text" id="devInstructor" class="input" placeholder="Contoh: Kak Fajar">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="devImageUrl">URL Gambar</label>
+                                <input type="text" id="devImageUrl" class="input" placeholder="https://...">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="devLinkUrl">Link Kelas / Materi</label>
+                                <input type="text" id="devLinkUrl" class="input" placeholder="https://...">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="devDescription">Deskripsi</label>
+                                <textarea id="devDescription" class="input" placeholder="Deskripsi program pelatihan..."></textarea>
+                            </div>
+
+                            <div class="actions">
+                                <button class="btn btn-primary" type="button" onclick="saveDevelopment()">Simpan Program</button>
+                                <button class="btn btn-secondary" type="button" onclick="resetDevelopmentForm()">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-head">
+                        <div>
+                            <h2>Daftar Program</h2>
+                            <p>Program pengembangan diri yang tampil di portal.</p>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="developmentList" class="empty-state">Memuat program...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: PANITIA -->
+        <section class="tab-panel" id="tab-panitia">
+            <div class="grid-2">
+                <div class="panel-card">
+                    <div class="panel-head">
+                        <div>
+                            <h2>Tambah / Edit Panitia</h2>
+                            <p>Kelola struktur organisasi/panitia kegiatan.</p>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-card">
+                            <h3 id="committeeFormTitle">Tambah Data Panitia</h3>
+
+                            <input type="hidden" id="committeeId">
+
+                            <div class="form-group">
+                                <label class="form-label" for="committeeEvent">Event</label>
+                                <input type="text" id="committeeEvent" class="input" placeholder="Contoh: 17 Agustus">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="committeeName">Nama</label>
+                                <input type="text" id="committeeName" class="input" placeholder="Nama panitia">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="committeePosition">Jabatan</label>
+                                <input type="text" id="committeePosition" class="input" placeholder="Contoh: Ketua">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="committeeDivision">Divisi</label>
+                                <input type="text" id="committeeDivision" class="input" placeholder="Contoh: Inti / Humas / Konsumsi">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="committeePhoto">URL Foto</label>
+                                <input type="text" id="committeePhoto" class="input" placeholder="https://...">
+                            </div>
+
+                            <div class="actions">
+                                <button class="btn btn-primary" type="button" onclick="saveCommittee()">Simpan Panitia</button>
+                                <button class="btn btn-secondary" type="button" onclick="resetCommitteeForm()">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-head">
+                        <div>
+                            <h2>Daftar Panitia</h2>
+                            <p>Data panitia berdasarkan event yang aktif.</p>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="toolbar">
+                            <input type="text" id="committeeFilterEvent" class="input" placeholder="Filter event, contoh: 17 Agustus" oninput="fetchAdminCommittee()">
+                        </div>
+                        <div id="committeeList" class="empty-state">Memuat data panitia...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer-note">
+            Dashboard Admin RESPEK • Gunakan dengan hati-hati untuk menjaga data tetap akurat dan aman.
+        </div>
+    </div>
+
+    <script>
+        function toggleAdminPassword() {
+            const input = document.getElementById('adminPassword');
+            if (!input) return;
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function switchAdminTab(tabName, btn) {
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(el => el.classList.remove('active'));
+
+            btn?.classList.add('active');
+            document.getElementById(`tab-${tabName}`)?.classList.add('active');
+        }
+    </script>
+
+    <script type="module">
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+        const supabaseUrl = 'https://omqxookhwflcmwvqmwyv.supabase.co';
+        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        const loginScreen = document.getElementById('loginScreen');
+        const adminApp = document.getElementById('adminApp');
+        const adminLoginForm = document.getElementById('adminLoginForm');
+        const loginAlert = document.getElementById('loginAlert');
+        const globalAlert = document.getElementById('globalAlert');
+        const btnAdminLogin = document.getElementById('btnAdminLogin');
+
+        let currentAdmin = null;
+        let reportsCache = [];
+
+        function showAlert(el, message, type = 'success') {
+            if (!el) return;
+            el.textContent = message;
+            el.className = `alert show ${type === 'success' ? 'alert-success' : 'alert-error'}`;
+            clearTimeout(el._timer);
+            el._timer = setTimeout(() => {
+                el.className = 'alert';
+            }, 5000);
+        }
+
+        function formatDate(dateStr, withTime = false) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            if (withTime) {
+                return date.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+            return date.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        function formatRupiah(value) {
+            return 'Rp ' + Number(value || 0).toLocaleString('id-ID');
+        }
+
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str).replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag]));
+        }
+
+        function getStatusBadge(status) {
+            if (status === 'Selesai') return `<span class="badge done">✅ Selesai</span>`;
+            if (status === 'Diproses') return `<span class="badge progress">🔄 Diproses</span>`;
+            return `<span class="badge waiting">⏳ Menunggu</span>`;
+        }
+
+        function showAdminApp(profile, user) {
+            currentAdmin = { profile, user };
+            document.getElementById('adminName').textContent = profile?.full_name || user?.email || 'Admin';
+            document.getElementById('adminRole').textContent = (profile?.role || 'admin').toUpperCase();
+
+            loginScreen.style.display = 'none';
+            adminApp.style.display = 'block';
+
+            loadDashboardData();
+        }
+
+        function showLoginScreen() {
+            currentAdmin = null;
+            loginScreen.style.display = 'flex';
+            adminApp.style.display = 'none';
+        }
+
+        async function checkAdminAccess(user) {
+            if (!user) return false;
+
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('id, full_name, role')
+                .eq('id', user.id)
+                .single();
+
+            if (error) throw error;
+            if (!data || data.role !== 'admin') return false;
+
+            showAdminApp(data, user);
+            return true;
+        }
+
+        async function initSession() {
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                if (error) throw error;
+
+                if (!session?.user) {
+                    showLoginScreen();
+                    return;
+                }
+
+                const isAdmin = await checkAdminAccess(session.user);
+                if (!isAdmin) {
+                    await supabase.auth.signOut();
+                    showLoginScreen();
+                    showAlert(loginAlert, 'Akun ini bukan admin.', 'error');
+                }
+            } catch (error) {
+                console.error(error);
+                showLoginScreen();
+                showAlert(loginAlert, 'Gagal memeriksa sesi admin.', 'error');
+            }
+        }
+
+        adminLoginForm?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('adminEmail').value.trim();
+            const password = document.getElementById('adminPassword').value;
+
+            btnAdminLogin.disabled = true;
+            btnAdminLogin.textContent = 'Memproses...';
+
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+
+                if (error) throw error;
+
+                const isAdmin = await checkAdminAccess(data.user);
+                if (!isAdmin) {
+                    await supabase.auth.signOut();
+                    showAlert(loginAlert, 'Akun berhasil login, tetapi tidak memiliki role admin.', 'error');
+                    return;
+                }
+
+                showAlert(loginAlert, 'Login admin berhasil.', 'success');
+            } catch (error) {
+                console.error(error);
+                showAlert(loginAlert, 'Gagal login admin. Periksa email atau kata sandi.', 'error');
+            } finally {
+                btnAdminLogin.disabled = false;
+                btnAdminLogin.textContent = 'Masuk ke Dashboard';
+            }
+        });
+
+        window.logoutAdmin = async function () {
+            try {
+                await supabase.auth.signOut();
+            } catch (error) {
+                console.error(error);
+            } finally {
+                showLoginScreen();
+            }
+        };
+
+        supabase.auth.onAuthStateChange(async (event, session) => {
+            if (event === 'SIGNED_OUT') {
+                showLoginScreen();
+            } else if (event === 'SIGNED_IN' && session?.user) {
+                try {
+                    const isAdmin = await checkAdminAccess(session.user);
+                    if (!isAdmin) {
+                        await supabase.auth.signOut();
+                        showAlert(loginAlert, 'Akun ini bukan admin.', 'error');
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        });
+
+        async function loadDashboardData() {
+            await Promise.all([
+                fetchAdminReports(),
+                fetchAdminAgendas(),
+                fetchAdminFinances(),
+                fetchAdminUmkm(),
+                fetchAdminDevelopments(),
+                fetchAdminCommittee()
+            ]);
+        }
+
+        async function fetchAdminReports() {
+            const tbody = document.getElementById('adminReportsTable');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7">
+                        <div class="loading-box">
+                            <div class="loader"></div>
+                            Memuat laporan...
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            try {
+                const { data, error } = await supabase
+                    .from('reports')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                reportsCache = data || [];
+                renderReportsTable(reportsCache);
+                updateStats(reportsCache);
+            } catch (error) {
+                console.error(error);
+                tbody.innerHTML = `<tr><td colspan="7" class="empty-state">⚠️ Gagal memuat laporan.</td></tr>`;
+            }
+        }
+
+        function updateStats(reports) {
+            const total = reports.length;
+            const waiting = reports.filter(r => r.status === 'Menunggu').length;
+            const progress = reports.filter(r => r.status === 'Diproses').length;
+            const done = reports.filter(r => r.status === 'Selesai').length;
+
+            document.getElementById('statReports').textContent = total;
+            document.getElementById('statWaiting').textContent = waiting;
+            document.getElementById('statProgress').textContent = progress;
+            document.getElementById('statDone').textContent = done;
+        }
+
+        function renderReportsTable(data) {
+            const tbody = document.getElementById('adminReportsTable');
+
+            if (!data || !data.length) {
+                tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Belum ada laporan.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map(item => `
+                <tr>
+                    <td>
+                        <strong>${escapeHtml(item.title)}</strong>
+                        <div style="font-size:12px;color:#6B7280;margin-top:6px;max-width:280px;">
+                            ${escapeHtml((item.description || '').slice(0, 90))}${(item.description || '').length > 90 ? '...' : ''}
+                        </div>
+                    </td>
+                    <td>${escapeHtml(item.category)}</td>
+                    <td>${escapeHtml(item.author_name || 'Anonim')}</td>
+                    <td>${getStatusBadge(item.status)}</td>
+                    <td>${Number(item.upvotes || 0)}</td>
+                    <td>${formatDate(item.created_at, true)}</td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn-sm btn-info" onclick="showReportDetail('${item.id}')">Detail</button>
+                            <button class="btn-sm btn-muted" onclick="setReportStatus('${item.id}','Menunggu')">Menunggu</button>
+                            <button class="btn-sm btn-info" onclick="setReportStatus('${item.id}','Diproses')">Diproses</button>
+                            <button class="btn-sm btn-success" onclick="setReportStatus('${item.id}','Selesai')">Selesai</button>
+                            <button class="btn-sm btn-danger" onclick="deleteReport('${item.id}')">Hapus</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.filterReportsAdmin = function () {
+            const search = document.getElementById('reportSearch').value.trim().toLowerCase();
+            const status = document.getElementById('reportStatusFilter').value;
+            const category = document.getElementById('reportCategoryFilter').value;
+
+            const filtered = reportsCache.filter(item => {
+                const matchSearch =
+                    (item.title || '').toLowerCase().includes(search) ||
+                    (item.category || '').toLowerCase().includes(search) ||
+                    (item.author_name || '').toLowerCase().includes(search);
+
+                const matchStatus = status === 'Semua' ? true : item.status === status;
+                const matchCategory = category === 'Semua' ? true : item.category === category;
+
+                return matchSearch && matchStatus && matchCategory;
+            });
+
+            renderReportsTable(filtered);
+        };
+
+        window.showReportDetail = function (id) {
+            const item = reportsCache.find(r => r.id === id);
+            if (!item) return;
+
+            let detail = `
+Judul: ${item.title}
+Kategori: ${item.category}
+Pelapor: ${item.author_name || 'Anonim'}
+Status: ${item.status}
+Upvotes: ${item.upvotes || 0}
+Tanggal: ${formatDate(item.created_at, true)}
+
+Deskripsi:
+${item.description || '-'}
+            `.trim();
+
+            if (item.image_url) {
+                detail += `
+
+Link Gambar:
+${item.image_url}`;
+            }
+
+            alert(detail);
+        };
+
+        window.setReportStatus = async function (id, status) {
+            if (!confirm(`Ubah status laporan menjadi "${status}"?`)) return;
+
+            try {
+                const { error } = await supabase
+                    .from('reports')
+                    .update({ status })
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                showAlert(globalAlert, `Status laporan berhasil diubah ke ${status}.`, 'success');
+                await fetchAdminReports();
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal mengubah status laporan.', 'error');
+            }
+        };
+
+        window.deleteReport = async function (id) {
+            if (!confirm('Yakin ingin menghapus laporan ini?')) return;
+
+            try {
+                const { error } = await supabase
+                    .from('reports')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                showAlert(globalAlert, 'Laporan berhasil dihapus.', 'success');
+                await fetchAdminReports();
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal menghapus laporan.', 'error');
+            }
+        };
+
+        async function fetchAdminAgendas() {
+            const container = document.getElementById('agendaList');
+            container.innerHTML = `<div class="loading-box"><div class="loader"></div>Memuat agenda...</div>`;
+
+            try {
+                const { data, error } = await supabase
+                    .from('agendas')
+                    .select('*')
+                    .order('date', { ascending: true });
+
+                if (error) throw error;
+
+                if (!data || !data.length) {
+                    container.innerHTML = `<div class="empty-state">Belum ada agenda.</div>`;
+                    return;
+                }
+
+                container.innerHTML = data.map(item => `
+                    <div class="form-card" style="margin-bottom:12px;">
+                        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+                            <div>
+                                <h3 style="margin-bottom:6px;">${escapeHtml(item.title)}</h3>
+                                <div style="font-size:13px;color:#6B7280;">
+                                    📅 ${formatDate(item.date)} • ⏰ ${escapeHtml(item.time || '-')} • 📍 ${escapeHtml(item.location || '-')}
+                                </div>
+                                <p style="margin-top:10px;font-size:14px;">${escapeHtml(item.description || '-')}</p>
+                            </div>
+                            <div class="actions">
+                                <button class="btn-sm btn-info" onclick="editAgenda('${item.id}')">Edit</button>
+                                <button class="btn-sm btn-danger" onclick="deleteAgenda('${item.id}')">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = `<div class="empty-state">⚠️ Gagal memuat agenda.</div>`;
+            }
+        }
+
+        window.saveAgenda = async function () {
+            const id = document.getElementById('agendaId').value;
+            const payload = {
+                title: document.getElementById('agendaTitle').value.trim(),
+                date: document.getElementById('agendaDate').value || null,
+                time: document.getElementById('agendaTime').value.trim(),
+                location: document.getElementById('agendaLocation').value.trim(),
+                description: document.getElementById('agendaDescription').value.trim()
+            };
+
+            if (!payload.title || !payload.date) {
+                showAlert(globalAlert, 'Judul dan tanggal agenda wajib diisi.', 'error');
+                return;
+            }
+
+            try {
+                let error;
+                if (id) {
+                    ({ error } = await supabase.from('agendas').update(payload).eq('id', id));
+                } else {
+                    ({ error } = await supabase.from('agendas').insert([payload]));
+                }
+                if (error) throw error;
+
+                showAlert(globalAlert, `Agenda berhasil ${id ? 'diperbarui' : 'ditambahkan'}.`, 'success');
+                resetAgendaForm();
+                await fetchAdminAgendas();
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal menyimpan agenda.', 'error');
+            }
+        };
+
+        window.editAgenda = async function (id) {
+            try {
+                const { data, error } = await supabase.from('agendas').select('*').eq('id', id).single();
+                if (error) throw error;
+
+                document.getElementById('agendaId').value = data.id;
+                document.getElementById('agendaTitle').value = data.title || '';
+                document.getElementById('agendaDate').value = data.date || '';
+                document.getElementById('agendaTime').value = data.time || '';
+                document.getElementById('agendaLocation').value = data.location || '';
+                document.getElementById('agendaDescription').value = data.description || '';
+                document.getElementById('agendaFormTitle').textContent = 'Edit Agenda';
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal memuat data agenda.', 'error');
+            }
+        };
+
+        window.resetAgendaForm = function () {
+            document.getElementById('agendaId').value = '';
+            document.getElementById('agendaTitle').value = '';
+            document.getElementById('agendaDate').value = '';
+            document.getElementById('agendaTime').value = '';
+            document.getElementById('agendaLocation').value = '';
+            document.getElementById('agendaDescription').value = '';
+            document.getElementById('agendaFormTitle').textContent = 'Tambah Agenda Baru';
+        };
+
+        window.deleteAgenda = async function (id) {
+            if (!confirm('Hapus agenda ini?')) return;
+
+            try {
+                const { error } = await supabase.from('agendas').delete().eq('id', id);
+                if (error) throw error;
+
+                showAlert(globalAlert, 'Agenda berhasil dihapus.', 'success');
+                await fetchAdminAgendas();
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal menghapus agenda.', 'error');
+            }
+        };
+
+        async function fetchAdminFinances() {
+            const container = document.getElementById('financeList');
+            container.innerHTML = `<div class="loading-box"><div class="loader"></div>Memuat data keuangan...</div>`;
+
+            try {
+                let query = supabase
+                    .from('finances')
+                    .select('*')
+                    .order('date', { ascending: false });
+
+                const category = document.getElementById('financeFilterCategory')?.value;
+                if (category && category !== 'Semua') {
+                    query = query.eq('category', category);
+                }
+
+                const { data, error } = await query;
+                if (error) throw error;
+
+                if (!data || !data.length) {
+                    container.innerHTML = `<div class="empty-state">Belum ada data keuangan.</div>`;
+                    return;
+                }
+
+                container.innerHTML = data.map(item => `
+                    <div class="form-card" style="margin-bottom:12px;">
+                        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+                            <div>
+                                <h3 style="margin-bottom:6px;">${escapeHtml(item.description)}</h3>
+                                <div style="font-size:13px;color:#6B7280;">
+                                    📂 ${escapeHtml(item.category)} • 📅 ${formatDate(item.date)}
+                                </div>
+                                <div style="margin-top:10px;">
+                                    <span class="badge ${String(item.type).toLowerCase() === 'masuk' ? 'done' : 'waiting'}">
+                                        ${String(item.type).toLowerCase() === 'masuk' ? '💚 Masuk' : '💸 Keluar'}
+                                    </span>
+                                    <strong style="margin-left:8px;">${formatRupiah(item.amount)}</strong>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button class="btn-sm btn-info" onclick="editFinance('${item.id}')">Edit</button>
+                                <button class="btn-sm btn-danger" onclick="deleteFinance('${item.id}')">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = `<div class="empty-state">⚠️ Gagal memuat data keuangan.</div>`;
+            }
+        }
+
+        window.saveFinance = async function () {
+            const id = document.getElementById('financeId').value;
+            const payload = {
+                category: document.getElementById('financeCategory').value,
+                type: document.getElementById('financeType').value,
+                amount: Number(document.getElementById('financeAmount').value || 0),
+                date: document.getElementById('financeDate').value || null,
+                description: document.getElementById('financeDescription').value.trim()
+            };
+
+            if (!payload.category || !payload.type || !payload.amount || !payload.date || !payload.description) {
+                showAlert(globalAlert, 'Semua field keuangan wajib diisi.', 'error');
+                return;
+            }
+
+            try {
+                let error;
+                if (id) {
+                    ({ error } = await supabase.from('finances').update(payload).eq('id', id));
+                } else {
+                    ({ error } = await supabase.from('finances').insert([payload]));
+                }
+
+                if (error) throw error;
+
+                showAlert(globalAlert, `Data keuangan berhasil ${id ? 'diperbarui' : 'ditambahkan'}.`, 'success');
+                resetFinanceForm();
+                await fetchAdminFinances();
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal menyimpan data keuangan.', 'error');
+            }
+        };
+
+        window.editFinance = async function (id) {
+            try {
+                const { data, error } = await supabase.from('finances').select('*').eq('id', id).single();
+                if (error) throw error;
+
+                document.getElementById('financeId').value = data.id;
+                document.getElementById('financeCategory').value = data.category || 'Kas Pemuda';
+                document.getElementById('financeType').value = String(data.type || 'masuk').toLowerCase();
+                document.getElementById('financeAmount').value = data.amount || '';
+                document.getElementById('financeDate').value = data.date || '';
+                document.getElementById('financeDescription').value = data.description || '';
+                document.getElementById('financeFormTitle').textContent = 'Edit Data Keuangan';
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal memuat data keuangan.', 'error');
+            }
+        };
+
+        window.resetFinanceForm = function () {
+            document.getElementById('financeId').value = '';
+            document.getElementById('financeCategory').value = 'Kas Pemuda';
+            document.getElementById('financeType').value = 'masuk';
+            document.getElementById('financeAmount').value = '';
+            document.getElementById('financeDate').value = '';
+            document.getElementById('financeDescription').value = '';
+            document.getElementById('financeFormTitle').textContent = 'Tambah Data Keuangan';
+        };
+
+        window.deleteFinance = async function (id) {
+            if (!confirm('Hapus data keuangan ini?')) return;
+
+            try {
+                const { error } = await supabase.from('finances').delete().eq('id', id);
+                if (error) throw error;
+
+                showAlert(globalAlert, 'Data keuangan berhasil dihapus.', 'success');
+                await fetchAdminFinances();
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal menghapus data keuangan.', 'error');
+            }
+        };
+
+        async function fetchAdminUmkm() {
+            const container = document.getElementById('umkmList');
+            container.innerHTML = `<div class="loading-box"><div class="loader"></div>Memuat data UMKM...</div>`;
+
+            try {
+                const { data, error } = await supabase
+                    .from('umkm')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!data || !data.length) {
+                    container.innerHTML = `<div class="empty-state">Belum ada data UMKM.</div>`;
+                    return;
+                }
+
+                container.innerHTML = data.map(item => `
+                    <div class="form-card" style="margin-bottom:12px;">
+                        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+                            <div>
+                                <h3 style="margin-bottom:6px;">${escapeHtml(item.title)}</h3>
+                                <div style="font-size:13px;color:#6B7280;">
+                                    📂 ${escapeHtml(item.category)} • 👤 ${escapeHtml(item.owner)} • 📱 ${escapeHtml(item.whatsapp || '-')}
+                                </div>
+                                <div style="margin-top:8px;font-weight:700;color:#A62122;">${escapeHtml(item.price || '-')}</div>
+                                <p style="margin-top:8px;font-size:14px;">${escapeHtml(item.description || '-')}</p>
+                            </div>
+                            <div class="actions">
+                                <button class="btn-sm btn-info" onclick="editUmkm('${item.id}')">Edit</button>
+                                <button class="btn-sm btn-danger" onclick="deleteUmkm('${item.id}')">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = `<div class="empty-state">⚠️ Gagal memuat data UMKM.</div>`;
+            }
+        }
+
+        window.saveUmkm = async function () {
+            const id = document.getElementById('umkmId').value;
+            const payload = {
+                title: document.getElementById('umkmTitle').value.trim(),
+                category: document.getElementById('umkmCategory').value.trim(),
+                price: document.getElementById('umkmPrice').value.trim(),
+                owner: document.getElementById('umkmOwner').value.trim(),
+                whatsapp: document.getElementById('umkmWhatsapp').value.trim(),
+                image_url: document.getElementById('umkmImageUrl').value.trim(),
+                description: document.getElementById('umkmDescription').value.trim()
+            };
+
+            if (!payload.title || !payload.category || !payload.owner) {
+                showAlert(globalAlert, 'Nama UMKM, kategori, dan pemilik wajib diisi.', 'error');
+                return;
+            }
+
+            try {
+                let error;
+                if (id) {
+                    ({ error } = await supabase.from('umkm').update(payload).eq('id', id));
+                } else {
+                    ({ error } = await supabase.from('umkm').insert([payload]));
+                }
+
+                if (error) throw error;
+
+                showAlert(globalAlert, `UMKM berhasil ${id ? 'diperbarui' : 'ditambahkan'}.`, 'success');
+                resetUmkmForm();
+                await fetchAdminUmkm();
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal menyimpan data UMKM.', 'error');
+            }
+        };
+
+        window.editUmkm = async function (id) {
+            try {
+                const { data, error } = await supabase.from('umkm').select('*').eq('id', id).single();
+                if (error) throw error;
+
+                document.getElementById('umkmId').value = data.id;
+                document.getElementById('umkmTitle').value = data.title || '';
+                document.getElementById('umkmCategory').value = data.category || '';
+                document.getElementById('umkmPrice').value = data.price || '';
+                document.getElementById('umkmOwner').value = data.owner || '';
+                document.getElementById('umkmWhatsapp').value = data.whatsapp || '';
+                document.getElementById('umkmImageUrl').value = data.image_url || '';
+                document.getElementById('umkmDescription').value = data.description || '';
+                document.getElementById('umkmFormTitle').textContent = 'Edit UMKM';
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal memuat data UMKM.', 'error');
+            }
+        };
+
+        window.resetUmkmForm = function () {
+            document.getElementById('umkmId').value = '';
+            document.getElementById('umkmTitle').value = '';
+            document.getElementById('umkmCategory').value = '';
+            document.getElementById('umkmPrice').value = '';
+            document.getElementById('umkmOwner').value = '';
+            document.getElementById('umkmWhatsapp').value = '';
+            document.getElementById('umkmImageUrl').value = '';
+            document.getElementById('umkmDescription').value = '';
+            document.getElementById('umkmFormTitle').textContent = 'Tambah UMKM';
+        };
+
+        window.deleteUmkm = async function (id) {
+            if (!confirm('Hapus data UMKM ini?')) return;
+
+            try {
+                const { error } = await supabase.from('umkm').delete().eq('id', id);
+                if (error) throw error;
+
+                showAlert(globalAlert, 'UMKM berhasil dihapus.', 'success');
+                await fetchAdminUmkm();
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal menghapus UMKM.', 'error');
+            }
+        };
+
+        async function fetchAdminDevelopments() {
+            const container = document.getElementById('developmentList');
+            container.innerHTML = `<div class="loading-box"><div class="loader"></div>Memuat program...</div>`;
+
+            try {
+                const { data, error } = await supabase
+                    .from('self_developments')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!data || !data.length) {
+                    container.innerHTML = `<div class="empty-state">Belum ada program pengembangan diri.</div>`;
+                    return;
+                }
+
+                container.innerHTML = data.map(item => `
+                    <div class="form-card" style="margin-bottom:12px;">
+                        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+                            <div>
+                                <h3 style="margin-bottom:6px;">${escapeHtml(item.title)}</h3>
+                                <div style="font-size:13px;color:#6B7280;">
+                                    📂 ${escapeHtml(item.category)} • 👨‍🏫 ${escapeHtml(item.instructor || '-')}
+                                </div>
+                                <p style="margin-top:8px;font-size:14px;">${escapeHtml(item.description || '-')}</p>
+                            </div>
+                            <div class="actions">
+                                <button class="btn-sm btn-info" onclick="editDevelopment('${item.id}')">Edit</button>
+                                <button class="btn-sm btn-danger" onclick="deleteDevelopment('${item.id}')">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = `<div class="empty-state">⚠️ Gagal memuat program.</div>`;
+            }
+        }
+
+        window.saveDevelopment = async function () {
+            const id = document.getElementById('devId').value;
+            const payload = {
+                title: document.getElementById('devTitle').value.trim(),
+                category: document.getElementById('devCategory').value.trim(),
+                instructor: document.getElementById('devInstructor').value.trim(),
+                image_url: document.getElementById('devImageUrl').value.trim(),
+                link_url: document.getElementById('devLinkUrl').value.trim(),
+                description: document.getElementById('devDescription').value.trim()
+            };
+
+            if (!payload.title || !payload.category) {
+                showAlert(globalAlert, 'Judul dan kategori program wajib diisi.', 'error');
+                return;
+            }
+
+            try {
+                let error;
+                if (id) {
+                    ({ error } = await supabase.from('self_developments').update(payload).eq('id', id));
+                } else {
+                    ({ error } = await supabase.from('self_developments').insert([payload]));
+                }
+
+                if (error) throw error;
+
+                showAlert(globalAlert, `Program berhasil ${id ? 'diperbarui' : 'ditambahkan'}.`, 'success');
+                resetDevelopmentForm();
+                await fetchAdminDevelopments();
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal menyimpan program.', 'error');
+            }
+        };
+
+        window.editDevelopment = async function (id) {
+            try {
+                const { data, error } = await supabase.from('self_developments').select('*').eq('id', id).single();
+                if (error) throw error;
+
+                document.getElementById('devId').value = data.id;
+                document.getElementById('devTitle').value = data.title || '';
+                document.getElementById('devCategory').value = data.category || '';
+                document.getElementById('devInstructor').value = data.instructor || '';
+                document.getElementById('devImageUrl').value = data.image_url || '';
+                document.getElementById('devLinkUrl').value = data.link_url || '';
+                document.getElementById('devDescription').value = data.description || '';
+                document.getElementById('devFormTitle').textContent = 'Edit Program';
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal memuat program.', 'error');
+            }
+        };
+
+        window.resetDevelopmentForm = function () {
+            document.getElementById('devId').value = '';
+            document.getElementById('devTitle').value = '';
+            document.getElementById('devCategory').value = '';
+            document.getElementById('devInstructor').value = '';
+            document.getElementById('devImageUrl').value = '';
+            document.getElementById('devLinkUrl').value = '';
+            document.getElementById('devDescription').value = '';
+            document.getElementById('devFormTitle').textContent = 'Tambah Program Baru';
+        };
+
+        window.deleteDevelopment = async function (id) {
+            if (!confirm('Hapus program ini?')) return;
+
+            try {
+                const { error } = await supabase.from('self_developments').delete().eq('id', id);
+                if (error) throw error;
+
+                showAlert(globalAlert, 'Program berhasil dihapus.', 'success');
+                await fetchAdminDevelopments();
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal menghapus program.', 'error');
+            }
+        };
+
+        async function fetchAdminCommittee() {
+            const container = document.getElementById('committeeList');
+            container.innerHTML = `<div class="loading-box"><div class="loader"></div>Memuat data panitia...</div>`;
+
+            try {
+                let query = supabase
+                    .from('committee')
+                    .select('*')
+                    .order('created_at', { ascending: true });
+
+                const eventFilter = document.getElementById('committeeFilterEvent')?.value?.trim();
+                if (eventFilter) {
+                    query = query.ilike('event', `%${eventFilter}%`);
+                }
+
+                const { data, error } = await query;
+                if (error) throw error;
+
+                if (!data || !data.length) {
+                    container.innerHTML = `<div class="empty-state">Belum ada data panitia.</div>`;
+                    return;
+                }
+
+                container.innerHTML = data.map(item => `
+                    <div class="form-card" style="margin-bottom:12px;">
+                        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+                            <div>
+                                <h3 style="margin-bottom:6px;">${escapeHtml(item.nama)}</h3>
+                                <div style="font-size:13px;color:#6B7280;">
+                                    🏷️ ${escapeHtml(item.event)} • ${escapeHtml(item.jabatan)} ${item.divisi ? '• ' + escapeHtml(item.divisi) : ''}
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button class="btn-sm btn-info" onclick="editCommittee('${item.id}')">Edit</button>
+                                <button class="btn-sm btn-danger" onclick="deleteCommittee('${item.id}')">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = `<div class="empty-state">⚠️ Gagal memuat data panitia.</div>`;
+            }
+        }
+
+        window.saveCommittee = async function () {
+            const id = document.getElementById('committeeId').value;
+            const payload = {
+                event: document.getElementById('committeeEvent').value.trim(),
+                nama: document.getElementById('committeeName').value.trim(),
+                jabatan: document.getElementById('committeePosition').value.trim(),
+                divisi: document.getElementById('committeeDivision').value.trim(),
+                foto_url: document.getElementById('committeePhoto').value.trim()
+            };
+
+            if (!payload.event || !payload.nama || !payload.jabatan) {
+                showAlert(globalAlert, 'Event, nama, dan jabatan wajib diisi.', 'error');
+                return;
+            }
+
+            try {
+                let error;
+                if (id) {
+                    ({ error } = await supabase.from('committee').update(payload).eq('id', id));
+                } else {
+                    ({ error } = await supabase.from('committee').insert([payload]));
+                }
+
+                if (error) throw error;
+
+                showAlert(globalAlert, `Data panitia berhasil ${id ? 'diperbarui' : 'ditambahkan'}.`, 'success');
+                resetCommitteeForm();
+                await fetchAdminCommittee();
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal menyimpan data panitia.', 'error');
+            }
+        };
+
+        window.editCommittee = async function (id) {
+            try {
+                const { data, error } = await supabase.from('committee').select('*').eq('id', id).single();
+                if (error) throw error;
+
+                document.getElementById('committeeId').value = data.id;
+                document.getElementById('committeeEvent').value = data.event || '';
+                document.getElementById('committeeName').value = data.nama || '';
+                document.getElementById('committeePosition').value = data.jabatan || '';
+                document.getElementById('committeeDivision').value = data.divisi || '';
+                document.getElementById('committeePhoto').value = data.foto_url || '';
+                document.getElementById('committeeFormTitle').textContent = 'Edit Data Panitia';
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal memuat data panitia.', 'error');
+            }
+        };
+
+        window.resetCommitteeForm = function () {
+            document.getElementById('committeeId').value = '';
+            document.getElementById('committeeEvent').value = '';
+            document.getElementById('committeeName').value = '';
+            document.getElementById('committeePosition').value = '';
+            document.getElementById('committeeDivision').value = '';
+            document.getElementById('committeePhoto').value = '';
+            document.getElementById('committeeFormTitle').textContent = 'Tambah Data Panitia';
+        };
+
+        window.deleteCommittee = async function (id) {
+            if (!confirm('Hapus data panitia ini?')) return;
+
+            try {
+                const { error } = await supabase.from('committee').delete().eq('id', id);
+                if (error) throw error;
+
+                showAlert(globalAlert, 'Data panitia berhasil dihapus.', 'success');
+                await fetchAdminCommittee();
+            } catch (error) {
+                console.error(error);
+                showAlert(globalAlert, 'Gagal menghapus data panitia.', 'error');
+            }
+        };
+
+        initSession();
+    </script>
+</body>
+</html>
