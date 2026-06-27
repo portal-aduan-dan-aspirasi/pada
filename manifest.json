@@ -1,0 +1,23 @@
+{
+  "name": "Portal RESPEK",
+  "short_name": "RESPEK",
+  "description": "Portal Aduan dan Aspirasi Pemuda RESPEK",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F3F4F6",
+  "theme_color": "#A62122",
+  "lang": "id",
+  "icons": [
+    {
+      "src": "./logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
